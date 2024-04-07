@@ -14,30 +14,34 @@ public class Counter : MonoBehaviour
     {
         _counter = 0;
         _text = GetComponent<Text>();
-        _coroutine = StartCoroutine(Check());
+        _coroutine = StartCoroutine(Increase());
     }
 
     private void Update()
     {
-        if (_coroutine == null && Input.GetMouseButtonDown(0) == true)
+        if (Input.GetMouseButtonDown(0) == true)
         {
-            _coroutine = StartCoroutine(Check());
-        } 
-
-        else if (Input.GetMouseButtonDown(0) == true)
-        {
-            StopCoroutine(_coroutine);
-            _coroutine = null;
-        }
+            if (_coroutine == null)
+            {
+                _coroutine = StartCoroutine(Increase());
+            }
+            else
+            {
+                StopCoroutine(_coroutine);
+                _coroutine = null;
+            }
+        }  
     }
 
-    private IEnumerator Check()
+    private IEnumerator Increase()
     {
+        WaitForSeconds waiting = new WaitForSeconds(_waiting);
+
         while (true)
         {
             _counter++;
             _text.text = _counter.ToString();
-            yield return new WaitForSeconds(_waiting);
+            yield return waiting;
         }
     }
 }
